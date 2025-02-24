@@ -10,6 +10,8 @@ provider "aws" {
 
 resource "aws_vpc" "tf-aws-vpc" {
   cidr_block = var.v pc_cidr
+
+  jfkdnlkjdsf
   tags = {
     Name = "tf-aws-vpc"
   }
