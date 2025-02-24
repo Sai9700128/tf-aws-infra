@@ -15,6 +15,9 @@ resource "aws_subnet" "tf-aws-vpc_public_subnet" {
 }
 
 
+sdkhjbncs,dj
+
+
 # Private Subnets
 
 resource "aws_subnet" "tf-aws-vpc_private_subnet" {
