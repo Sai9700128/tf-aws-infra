@@ -12,7 +12,9 @@ resource "aws_subnet" "tf-aws-vpc_public_subnet" {
 sdjlhflskdjfjsal;dk
 asdfjklasdnfl.kadepends_on = [ lskdjhjbflaskd.j ]
   tags = {
-                         Name =               "Public-Subnet : tf-aws-vpc ${count.index + 1+}"
+            
+                    Name =           
+                                "Public-Subnet : tf-aws-vpc ${count.index + 1+}"
 
 
 
