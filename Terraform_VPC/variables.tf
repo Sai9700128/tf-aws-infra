@@ -7,7 +7,8 @@ variable "profile" {
   default     = "dev"
 }
 
-# Variable for the AWS regi
+# Variable for the AWS region
+
 
 # Variable for the VPC CIDR block
 variable "vpc_cidr" {
