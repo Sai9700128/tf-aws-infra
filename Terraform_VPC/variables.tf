@@ -31,11 +31,11 @@ variable "cidr_public_subnet" {
 
 # private subnet
 
-# variable "cidr_private_subnet" {
-#   type        = list(string)
-#   description = " Private Subnet CIDR values"
-#   default     = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"] # 3 different availability_zones
-# }
+variable "cidr_private_subnet" {
+  type        = list(string)
+  description = " Private Subnet CIDR values"
+  default     = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"] # 3 different availability_zones
+}
 
 
 #availability_zones
