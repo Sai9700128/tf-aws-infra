@@ -1,18 +1,18 @@
 
 
 # Variable for the AWS CLI profile
-variable "profile" {
-  description = "The AWS CLI profile to use"
-  type        = string
-  default     = "dev"
-}
+# variable "profile" {
+#   description = "The AWS CLI profile to use"
+#   type        = string
+#   default     = "dev"
+# }
 
 # Variable for the AWS region
-# variable "region" {
-#   description = "The AWS region to create resources in"
-#   type        = string
-#   default     = "us-east-1" # Default region
-# }
+variable "region" {
+  description = "The AWS region to create resources in"
+  type        = string
+  default     = "us-east-1" # Default region
+}
 
 # Variable for the VPC CIDR block
 variable "vpc_cidr" {
