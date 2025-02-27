@@ -18,11 +18,11 @@ data "aws_ami" "custom_ami" {
 }
 
 resource "aws_instance" "ec2_instance" {
-  ami                    = data.aws_ami.custom_ami.id
-  instance_type          = "t2.micro"
-  subnet_id              = data.aws_subnet.tf-aws-vpc_public_subnet.id
-  vpc_security_group_ids = [aws_security_group.tf-aws-vpc-ec2_sg.id]
-  key_name               = aws_key_pair.deployer.key_name
+  ami                         = data.aws_ami.custom_ami.id
+  instance_type               = "t2.micro"
+  subnet_id                   = data.aws_subnet.tf-aws-vpc_public_subnet.id
+  vpc_security_group_ids      = [aws_security_group.tf-aws-vpc-ec2_sg.id]
+  key_name                    = aws_key_pair.deployer.key_name
   associate_public_ip_address = true
 
   tags = {
