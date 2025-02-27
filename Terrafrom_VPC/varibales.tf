@@ -55,3 +55,10 @@ variable "cidr_block" {
   description = "Route Table CIDR block"
   default     = "0.0.0.0/0"
 }
+
+# Variable for the public key path
+variable "public_key_path" {
+  description = "The path to the public key file"
+  type        = string
+  default     = "~/.ssh/id_rsa.pub" # Default public key path
+}
