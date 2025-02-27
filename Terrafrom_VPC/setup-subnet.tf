@@ -8,10 +8,12 @@ resource "aws_subnet" "tf-aws-vpc_public_subnet" {
   vpc_id            = aws_vpc.tf-aws-vpc.id
   cidr_block        = element(var.cidr_public_subnet, count.index)
   availability_zone = element(var.us-availability_zones, count.index)
+
   tags = {
     Name = "Public-Subnet : tf-aws-vpc ${count.index + 1}"
   }
 }
+
 
 # Private Subnets
 
