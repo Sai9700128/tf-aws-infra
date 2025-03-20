@@ -2,8 +2,7 @@
 
 # Public route table Association
 
-resource "
-aws_route_table_association" "public_subnet_association" {
+resource "aws_route_table_association" "public_subnet_association" {
   count          = length(var.cidr_public_subnet)
   depends_on     = [aws_subnet.tf-aws-vpc_public_subnet, aws_route_table.tf-aws-vpc-public_route_table]
   subnet_id      = element(aws_subnet.tf-aws-vpc_public_subnet[*].id, count.index)
