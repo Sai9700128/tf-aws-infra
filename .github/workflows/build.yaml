@@ -4,10 +4,10 @@ on:
   pull_request:
     branches:
       - main
-#test
+
 jobs:
   terraform:
-    name: Terraform Format Check and Validate
+    name: Terraform Format Check, Init, and Validate
     runs-on: ubuntu-latest
 
     steps:
@@ -26,6 +26,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Validate
-        run: |
-          terraform validate
-        working-directory: ./Terraform_VPC
+        run: terraform validate
