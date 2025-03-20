@@ -4,21 +4,18 @@
 variable "profile" {
   description = "The AWS CLI profile to use"
   type        = string
-  default     = "dev"
 }
 
 # Variable for the AWS region
 variable "region" {
   description = "The AWS region to create resources in"
   type        = string
-  default     = "us-east-1" # Default region
 }
 
 # Variable for the VPC CIDR block
 variable "vpc_cidr" {
   type        = string
   description = "CIDR block for the VPC"
-  default     = "10.0.0.0/16" # Default CIDR block
 }
 
 # public subnet
@@ -26,7 +23,6 @@ variable "vpc_cidr" {
 variable "cidr_public_subnet" {
   type        = list(string)
   description = "Public Subnet CIDR values"
-  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"] # 3 different availability_zones
 }
 
 # private subnet
@@ -34,7 +30,6 @@ variable "cidr_public_subnet" {
 variable "cidr_private_subnet" {
   type        = list(string)
   description = " Private Subnet CIDR values"
-  default     = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"] # 3 different availability_zones
 }
 
 
@@ -44,7 +39,6 @@ variable "cidr_private_subnet" {
 variable "us-availability_zones" {
   type        = list(string)
   description = "Availability_zones"
-  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
 
 
@@ -53,12 +47,98 @@ variable "us-availability_zones" {
 variable "cidr_block" {
   type        = string
   description = "Route Table CIDR block"
-  default     = "0.0.0.0/0"
 }
 
 # Variable for the public key path
 variable "public_key_path" {
   description = "The path to the public key file"
   type        = string
-  default     = "~/.ssh/id_rsa.pub" # Default public key path
+}
+
+
+variable "db_identifier" {
+  description = "The identifier for the RDS instance"
+  type        = string
+  default     = "csye6225"
+}
+
+variable "db_engine" {
+  description = "The RDS engine"
+  type        = string
+}
+
+variable "db_engine_version" {
+  description = "The version of the RDS engine"
+  type        = string
+}
+
+variable "instance_class" {
+  description = "The instance class for the RDS instance"
+  type        = string
+}
+
+variable "allocated_storage" {
+  description = "The allocated storage for the RDS instance"
+  type        = number
+}
+
+variable "db_name" {
+  description = "The name of the database"
+  type        = string
+}
+
+variable "db_username" {
+  description = "The username for the RDS instance"
+  type        = string
+}
+
+variable "db_password" {
+  description = "The password for the RDS instance"
+  type        = string
+  sensitive   = true
+}
+
+variable "publicly_accessible" {
+  description = "Whether the RDS instance is publicly accessible"
+  type        = bool
+}
+
+variable "multi_az" {
+  description = "Whether the RDS instance is multi-AZ"
+  type        = bool
+}
+
+variable "subnet_group_name" {
+  description = "The subnet group for the RDS instance"
+  type        = string
+  default     = "your_subnet_group_name"
+}
+
+variable "parameter_group_name" {
+  description = "The name of the DB parameter group"
+  type        = string
+  default     = "csye6225-db-parameter-group"
+}
+
+
+variable "AWS_Region" {
+  type = string
+}
+variable "app_port" {
+  description = "Application port"
+  type        = number
+}
+
+
+variable "ami_id" {
+  type = string
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+
+variable "key_name" {
+  type = string
 }
