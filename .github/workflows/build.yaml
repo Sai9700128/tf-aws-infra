@@ -28,4 +28,4 @@ jobs:
       - name: Terraform Validate
         run: |
           terraform validate
-        working-directory: ./Terraform_VPC
+        working-directory: /home/runner/work/tf-aws-infra/Terraform_VPC
