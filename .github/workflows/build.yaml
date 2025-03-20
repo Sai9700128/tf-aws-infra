@@ -17,13 +17,15 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "1.5.0"
+          terraform_version: latest
 
       - name: Terraform Format Check
         run: terraform fmt -recursive -check
+        working-directory: ./Terraform_VPC
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./Terraform_VPC
 
       - name: Terraform Validate
         run: |
