@@ -21,11 +21,11 @@ jobs:
 
       - name: Terraform Format Check
         run: terraform fmt -recursive -check
-        working-directory: ./Terraform_VPC
+        working-directory: Terraform_VPC
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Terraform_VPC
+        working-directory: Terraform_VPC
 
       - name: Terraform Validate
         run: |
