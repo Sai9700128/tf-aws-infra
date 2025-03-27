@@ -1,9 +1,7 @@
 
-
-
-# IAM role for the Ec2 instance
+# IAM role for the EC2 instance
 resource "aws_iam_role" "ec2_role" {
-  name = "EC2-S3-RDS-Access"
+  name = "EC2-S3-RDS-CloudWatch-Access"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -11,30 +9,44 @@ resource "aws_iam_role" "ec2_role" {
       {
         Action = "sts:AssumeRole"
         Principal = {
-          Service = "ec2.amazonaws.com" # Specifies that EC2 can assume this role
+          Service = "ec2.amazonaws.com"
         }
         Effect = "Allow"
         Sid    = ""
-      },
+      }
     ]
   })
 }
 
+# Attach AmazonS3FullAccess (For S3 operations)
 resource "aws_iam_role_policy_attachment" "s3_access" {
-  role       = aws_iam_role.ec2_role.name                   # Attach the role created above
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess" # AWS managed policy for S3 access
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
+# Attach AmazonRDSFullAccess (For database operations)
 resource "aws_iam_role_policy_attachment" "rds_access" {
-  role       = aws_iam_role.ec2_role.name                    # Attach the role created above
-  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess" # AWS managed policy for RDS access
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }
 
+# Attach CloudWatchAgentServerPolicy (For collecting logs)
+resource "aws_iam_role_policy_attachment" "cloudwatch_agent_access" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+# **New Policy:** Attach CloudWatchFullAccess or Custom PutMetricData policy
+resource "aws_iam_role_policy_attachment" "cloudwatch_full_access" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+}
+
+# Instance Profile to attach the IAM Role to EC2
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
-  name = "EC2-S3-RDS-Access"
+  name = "EC2-S3-RDS-CloudWatch-Access"
   role = aws_iam_role.ec2_role.name
 }
-
 
 
 resource "aws_instance" "csye6225_server" {
@@ -42,7 +54,7 @@ resource "aws_instance" "csye6225_server" {
   instance_type               = var.instance_type
   vpc_security_group_ids      = [aws_security_group.tf-aws-vpc-ec2_sg.id]
   subnet_id                   = aws_subnet.tf-aws-vpc_public_subnet[0].id
-  iam_instance_profile        = aws_iam_instance_profile.ec2_instance_profile.name # Attach the IAM role
+  iam_instance_profile        = aws_iam_instance_profile.ec2_instance_profile.name
   key_name                    = var.key_name
   associate_public_ip_address = true
   disable_api_termination     = false
@@ -70,6 +82,7 @@ resource "aws_instance" "csye6225_server" {
   }
 
   depends_on = [
-    aws_db_instance.csye6225_db_instance
+    aws_db_instance.csye6225_db_instance,
+    aws_iam_instance_profile.ec2_instance_profile
   ]
 }
