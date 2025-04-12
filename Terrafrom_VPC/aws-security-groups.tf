@@ -47,12 +47,12 @@ resource "aws_security_group" "tf-aws-vpc-ec2_sg" {
 
   # Allow SSH (22)
   ingress {
-    description     = "Allow SSH access from Load Balancer security group"
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    cidr_blocks     = ["10.0.0.0/16"]
-    security_groups = [aws_security_group.load_balancer_sg.id]
+    description = "Allow SSH access from Load Balancer security group"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    # security_groups = [aws_security_group.load_balancer_sg.id]
   }
 
   # # Allow HTTP (80)

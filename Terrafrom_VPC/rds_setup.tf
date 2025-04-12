@@ -41,20 +41,24 @@ resource "aws_db_subnet_group" "csye6225_db_subnet_group" {
 }
 
 resource "aws_db_instance" "csye6225_db_instance" {
-  identifier             = var.db_identifier
-  engine                 = var.db_engine
-  engine_version         = var.db_engine_version
-  instance_class         = var.instance_class
-  allocated_storage      = var.allocated_storage
-  db_name                = var.db_name
-  username               = var.db_username
-  password               = var.db_password
+  identifier        = var.db_identifier
+  engine            = var.db_engine
+  engine_version    = var.db_engine_version
+  instance_class    = var.instance_class
+  allocated_storage = var.allocated_storage
+  db_name           = var.db_name
+  username          = var.db_username
+  password          = random_password.db_password.result
+  # password               = var.db_password
   publicly_accessible    = var.publicly_accessible
   multi_az               = var.multi_az
   db_subnet_group_name   = aws_db_subnet_group.csye6225_db_subnet_group.name
   vpc_security_group_ids = [aws_security_group.csye6225_db_security_group.id]
   parameter_group_name   = var.parameter_group_name
   skip_final_snapshot    = true
+  # This is where we assign the KMS key for RDS
+  storage_encrypted = true
+  kms_key_id        = aws_kms_key.rds_key.arn
 
   tags = {
     Name = "CSYE6225 RDS Instance"
