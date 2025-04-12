@@ -1,8 +1,8 @@
 
 # fetching existing zone
 data "aws_route53_zone" "existing_zone" {
-  name         = "dev.saikalyanb.me" # Replace with your domain name
-  private_zone = false               # Set to true if it's a private hosted zone
+  name         = "demo.saikalyanb.me" # Replace with your domain name
+  private_zone = false                # Set to true if it's a private hosted zone
 }
 
 

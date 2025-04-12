@@ -1,6 +1,7 @@
 # Autoscaling Groups
 
 resource "aws_autoscaling_group" "tf-aws-vpc-asg" {
+  name             = "csye6225-asg"
   desired_capacity = 1
   max_size         = 5
   min_size         = 1
@@ -32,47 +33,61 @@ resource "aws_autoscaling_group" "tf-aws-vpc-asg" {
 # Target Tracking Policy
 
 resource "aws_autoscaling_policy" "scale_up" {
-  name                   = "scale-up-policy"                         # Name of the scaling policy
-  autoscaling_group_name = aws_autoscaling_group.tf-aws-vpc-asg.name # Reference the ASG created above                                        # Increase the capacity by 1 instance
-  adjustment_type        = "ChangeInCapacity"                        # Change the capacity by 1 instance
-  # cooldown                = 60                                        # Cooldown period in seconds
-  metric_aggregation_type = "Average" # Average of the metric data points3
+  name                   = "scale-up-policy"
+  scaling_adjustment     = 1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 60
+  autoscaling_group_name = aws_autoscaling_group.tf-aws-vpc-asg.name
+}
 
-  policy_type = "StepScaling" # Type of scaling policy
+# target_tracking_configuration {
+#   target_value = 5
+#   predefined_metric_specification {
+#     predefined_metric_type = "ASGAverageCPUUtilization" # Metric to track
+#   }
 
-  step_adjustment {
-    metric_interval_lower_bound = 5.0 # CPU > 5%
-    scaling_adjustment          = 1   # Add 1 instance
+# }
+resource "aws_cloudwatch_metric_alarm" "cpu_high" {
+  alarm_name          = "cpu-high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 5
+  alarm_description   = "Scale up if CPU > 5%"
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.tf-aws-vpc-asg.name
   }
 
-  # target_tracking_configuration {
-  #   target_value = 5
-  #   predefined_metric_specification {
-  #     predefined_metric_type = "ASGAverageCPUUtilization" # Metric to track
-  #   }
-
-  # }
+  alarm_actions = [aws_autoscaling_policy.scale_up.arn]
 }
 
 # Create an Auto Scaling policies for scaling down
 
 resource "aws_autoscaling_policy" "scale_down" {
-  name                   = "sale-down-policy"                        # Name of the scaling policy
-  autoscaling_group_name = aws_autoscaling_group.tf-aws-vpc-asg.name # Reference the ASG created above
-
-  adjustment_type = "ChangeInCapacity" # Change the capacity by 1 instance
-  # cooldown                = 60                 # Cooldown period in seconds
-  metric_aggregation_type = "Average"     # Average of the metric data points
-  policy_type             = "StepScaling" # Type of scaling policy
-  # target_tracking_configuration {
-  #   target_value = 3
-  #   predefined_metric_specification {
-  #     predefined_metric_type = "ASGAverageCPUUtilization" # Metric to track
-  #   }
-  # }
-
-  step_adjustment {
-    metric_interval_lower_bound = 3.0 # CPU > 5%
-    scaling_adjustment          = 1   # Add 1 instance
-  }
+  name                   = "scale-down-policy"
+  scaling_adjustment     = -1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 60
+  autoscaling_group_name = aws_autoscaling_group.tf-aws-vpc-asg.name
 }
+
+resource "aws_cloudwatch_metric_alarm" "cpu_low" {
+  alarm_name          = "cpu-low"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 3
+  alarm_description   = "Scale down if CPU < 3%"
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.tf-aws-vpc-asg.name
+  }
+
+  alarm_actions = [aws_autoscaling_policy.scale_down.arn]
+}
+

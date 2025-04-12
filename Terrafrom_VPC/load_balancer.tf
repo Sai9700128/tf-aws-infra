@@ -6,6 +6,13 @@
 # 5. Mention the load balancer in autoscaling group
 
 
+variable "certificate_arn" {
+  description = "The ARN of the SSL certificate to use for HTTPS"
+  type        = string
+}
+
+
+
 # 1. Define Load Balancer security group
 
 # Defined in aws-security-groups file
@@ -48,8 +55,10 @@ resource "aws_lb_target_group" "target_group" {
 
 resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_lb.ALB.arn
-  port              = 80
-  protocol          = "HTTP"
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = var.certificate_arn
 
 
   default_action {
